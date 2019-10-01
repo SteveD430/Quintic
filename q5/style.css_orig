@@ -1,0 +1,446 @@
+@charset "UTF-8";
+/*
+Theme Name: Q5
+Theme URI: http://guintic.co.uk/
+Author: Quintic
+Author URI: http://quintic.co.uk/
+Description: A theme for Thoughts, Notes, & Interlinked Ideas
+Requires at least: WordPress 4.9.6
+Version: 1.0
+License: GNU General Public License v2 or later
+License URI: LICENSE
+Text Domain: q5
+Tags: custom-background, custom-logo, custom-menu, featured-images, threaded-comments, translation-ready
+
+This theme, like WordPress, is licensed under the GPL.
+Use it to make something cool, have fun, and share what you've learned with others.
+
+Q5 unashamadly plagarises the CSS from Wordpress Twenty Nineteen
+The style shhet makes use of the CSS Variables functionality to define constants such as colours and fonts. 
+thus enabling the theme to be readily 'skinned'.
+
+ The Constants are defined in separate files loaded by the usual enqueue style mechanism.
+*/
+/*--------------------------------------------------------------
+>>> TABLE OF CONTENTS:
+----------------------------------------------------------------
+# Variables
+# Normalize
+# Typography
+	## Headings
+	## Copy
+# Elements
+	## Lists
+	## Tables
+# Forms
+	## Buttons
+	## Fields
+# Navigation
+	## Links
+	## Menus
+	## Next & Previous
+# Accessibility
+# Alignments
+# Clearings
+# Layout
+# Widgets
+# Content
+	## Archives
+	## Posts
+	## Pages
+	## Comments
+# Blocks
+# Media
+	## Captions
+	## Galleries
+--------------------------------------------------------------*/
+/*
+ * Chrome renders extra-wide &nbsp; characters for the Hoefler Text font.
+ * This results in a jumping cursor when typing in both the Classic and block
+ * editors. The following font-face override fixes the issue by manually inserting
+ * a custom font that includes just a Hoefler Text space replacement for that
+ * character instead.
+ */
+@font-face {
+  font-family: 'NonBreakingSpaceOverride';
+  src: url(data:application/font-woff2;charset=utf-8;base64,d09GMgABAAAAAAMoAA0AAAAACDQAAALTAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAP0ZGVE0cGh4GYACCahEICjx3CywAATYCJANUBCAFhiEHgWwbXQfILgpsY+rQRRARwyAs6uL7pxzYhxEE+32b3aeHmifR6tklkS9hiZA0ewkqGRJE+H7/+6378ASViK/PGeavqJyOzsceKi1s3BCiQsiOdn1r/RBgIJYEgCUhbm/8/8/h4saPssnTNkkiWUBrTRtjmQSajw3Ui3pZ3LYDPD+XG2C3JA/yKAS8/rU5eNfuGqRf4eNNgV4YAlIIgxglEkWe6FYpq10+wi3g+/nUgvgPFczNrz/RsTgVm/zfbPuHZlsuQECxuyqBcQwKFBjFgKO8AqP4bAN9tFJtnM9xPcbNjeXS/x1wY/xU52f5W/X1+9cnH4YwKIaoRRAkUkj/YlAAeF/624foiIDBgBmgQBeGAyhBljUPZUm/l2dTvmpqcBDUOHdbPZWd8JsBAsGr4w8/EDn82/bUPx4eh0YNrQTBuHO2FjQEAGBwK0DeI37DpQVqdERS4gZBhpeUhWCfLFz7J99aEBgsJCHvUGAdAPp4IADDCAPCEFMGpMZ9AQpTfQtQGhLbGVBZFV8BaqNyP68oTZgHNj3M8kBPfXTTC9t90UuzYhy9ciH0grVlOcqyCytisvbsERsEYztiznR0WCrmTksJwbSNK6fd1Rvr25I9oLvctUoEbNOmXJbqgYgPXEHJ82IUsrCnpkxh23F1rfZ2zcRnJYoXtauB3VTFkFXQg3uoZYD5qE0kdjDtoDoF1h2bulGmev5HbYhbrjtohQSRI4aNOkffIcT+d3v6atpaYh3JvPoQsztCcqvaBkppDSPcQ3bw3KaCBo1f5CJWTZEgW3LjLofYg51MaVezrx8xZitYbQ9KYeoRaqQdVLwSEfrKXLK1otCWOKNdR/YwYAfon5Yk8O2MJfSD10dPGA5PIJJQMkah0ugMJiv6x4Dm7LEa8xnrRGGGLAg4sAlbsA07sAt76DOsXKO3hIjtIlpnnFrt1qW4kh6NhS83P/6HB/fl1SMAAA==) format("woff2"), url(data:application/font-woff;charset=utf-8;base64,d09GRgABAAAAAAUQAA0AAAAACDQAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABGRlRNAAAE9AAAABwAAAAchf5yU0dERUYAAATYAAAAHAAAAB4AJwAbT1MvMgAAAaAAAABJAAAAYJAcgU5jbWFwAAACIAAAAF4AAAFqUUxBZ2dhc3AAAATQAAAACAAAAAgAAAAQZ2x5ZgAAApAAAAAyAAAAPL0n8y9oZWFkAAABMAAAADAAAAA2Fi93Z2hoZWEAAAFgAAAAHQAAACQOSgWaaG10eAAAAewAAAAzAAAAVC7TAQBsb2NhAAACgAAAABAAAAAsAOQBAm1heHAAAAGAAAAAHQAAACAAWQALbmFtZQAAAsQAAAF6AAADIYvD/Adwb3N0AAAEQAAAAI4AAADsapk2o3jaY2BkYGAA4ov5mwzj+W2+MnCzXwCKMNzgCBSB0LfbQDQ7AxuI4mBgAlEAFKQIRHjaY2BkYGD3+NvCwMDBAALsDAyMDKhAFAA3+wH3AAAAeNpjYGRgYBBl4GBgYgABEMnIABJzAPMZAAVmAGUAAAB42mNgZlJhnMDAysDCKsKygYGBYRqEZtrDYMT4D8gHSmEHjgUFOQwODAqqf9g9/rYwMLB7MNUAhRlBcsxBrMlASoGBEQAj8QtyAAAAeNrjYGBkAAGmWQwMjO8gmBnIZ2NA0ExAzNjAAFYJVn0ASBsD6VAIDZb7AtELAgANIgb9AHjaY2BgYGaAYBkGRgYQSAHyGMF8FgYPIM3HwMHAxMDGoMCwQIFLQV8hXvXP//9AcRCfAcb///h/ygPW+w/vb7olBjUHCTCyMcAFGZmABBO6AogThgZgIUsXAEDcEzcAAHjaY2BgECMCyoEgACZaAed42mNgYmRgYGBnYGNgYAZSDJqMgorCgoqCjECRXwwNrCAKSP5mAAFGBiRgyAAAi/YFBQAAeNqtkc1OwkAUhU/5M25cEhcsZick0AwlBJq6MWwgJkAgYV/KAA2lJeUn+hY+gktXvpKv4dLTMqKycGHsTZNv7px7z50ZAFd4hYHjdw1Ls4EiHjVncIFnzVnc4F1zDkWjrzmPW+NNcwGlzIRKI3fJlUyrEjZQxb3mDH2fNGfRx4vmHKqG0JzHg6E0F9DOlFBGBxUI1GEzLNT4S0aLuTtsGAEUuYcQHkyg3KmIum1bNUvKlrjbbAIleqHHnS4iSudpQcySMYtdFiXlAxzSbAwfMxK6kZoHKhbjjespMTioOPZnzI+4ucCeTVyKMVKLfeAS6vSWaTinuZwzyy/Dc7vaed+6KaV0kukdPUk6yOcctZPvvxxqksq2lEW8RvHjMEO2FCl/zy6p3NEm0R9OFSafJdldc4QVeyaaObMBO0/5cCaa6d9Ggyubxire+lEojscdjoWUR1xGOy8KD8mG2ZLO2l2paDc3A39qmU2z2W5YNv5+u79e6QfGJY/hAAB42m3NywrCMBQE0DupWp/1AYI7/6DEaLQu66Mrd35BKUWKJSlFv1+rue4cGM7shgR981qSon+ZNwUJ8iDgoYU2OvDRRQ99DDDECAHGmGCKmf80hZSx/Kik/LliFbtmN6xmt+yOjdg9GztV4tROnRwX/Bsaaw51nt4Lc7tWaZYHp/MlzKx51LZs5htNri+2AAAAAQAB//8AD3jaY2BkYGDgAWIxIGZiYARCESBmAfMYAAR6AEMAAAABAAAAANXtRbgAAAAA2AhRFAAAAADYCNuG) format("woff");
+}
+
+
+.q5-header {
+	display:block;
+	background:var(q5-header-background-color, silver);
+	background:linear-gradient(top, var(--q5-header-background-color, silver), white);
+	background:-o-linear-gradient(top, var(--q5-header-background-color, silver), white);
+	background:-moz-linear-gradient(top, var(--q5-header-background-color, silver), white);
+	background:-webkit-linear-gradient(top, var(--q5-header-background-color, silver), white);
+}
+.q5-footer {
+	display:block;
+	background:var(silver, q5-header-background-color);
+	background:linear-gradient(top, white, var(--q5-header-background-color, silver));
+	background:-o-linear-gradient(top, white, var(--q5-header-background-color, silver));
+	background:-moz-linear-gradient(top, white, var(--q5-header-background-color, silver));
+	background:-webkit-linear-gradient(top, white, var(--q5-header-background-color, silver));
+}
+
+.q5-siteLogo {
+	margin:5px, 15px, 5px, 5px; 
+}
+
+.q5-SiteTitle::first-letter{
+    color: var(--q5-siteTitleColor);
+    font-size:40pt;
+    margin:0px 0px 4px 10px;
+	display:inline-block;
+	}
+	
+.q5-SiteTitle {
+    color: var(--q5-siteTitleColor);
+    font-size:20pt;
+    margin:0px 30px 0px -4px;
+    vertical-align:16px;
+	display:inline-block;
+	}
+	
+.q5-HeaderMenuBar {
+    position:absolute;
+    top:50px;
+    right:25px;
+    z-index:10;
+	}	
+	
+.q5-HeaderMenu {
+    color: var(--q5-siteTitleColor);
+    font-size:12px;
+    border-color: var(--q5-siteTitleColor);
+    border-width:2px;
+    border-spacing:5px;
+    border-style:none;
+    padding:3px;
+    margin:5px;
+}
+
+	
+.q5-PageTitle {
+	color: var(--q5-PageTitleColor);
+	font-size: var(--q5-PageTitleSize);
+	font-family: var(--q5-PageTitleFont);
+}	
+
+.q5-PageContent {
+	color: var(--q5-PageContentColor);
+	font-size: var(--q5-PageContentSize);
+	font-family: var(--q5-PageContentFont);
+}	
+	
+.sidebar {
+    width: 230px;
+    flex: 0 0 230px;
+	border: 2px;
+}	
+
+.q5-container {
+    display: flex;
+    x-justify-content: space-around;
+    x-align-items: stretch;
+}
+
+.q5-content {
+	flex-grow:1;
+}
+	
+.copyright {
+    font-size: 10px;
+    font-family: Tahoma;
+    padding:30px;
+    text-align: center;
+}
+
+.debug {
+    font-size: 12px;
+    font-family: Tahoma;
+	color:red;
+}
+
+.q5-sidebar {
+	width: 50%
+}
+
+.q5_toc {
+	position: fixed;
+}
+
+.q5_toc ul, .q5_toc_hidden ul {
+	position: relative;
+	list-style:none;
+	padding-left:18px;
+}
+
+.q5_toc li::before, .q5_toc li::after {
+	content: "";
+	position: absolute;
+	left: -12px;
+}
+
+.q5_toc li::before {
+	border-top: 1px solid #000;
+	top: 9px;
+	width: 8px;
+	height: 1px;
+}
+
+.q5_toc li::after {
+	border-left: 1px solid #000;
+	height: 100%;
+	width: 1px;
+	top: 2px;
+}
+
+.q5_toc ul > li::last-child::after {
+	height: 8px;
+}
+
+.q5_toc li, .q5_toc_hidden li {
+	margin: 4px 10px 4px 0px;
+}
+
+.q5_toc_title, .q5_toc_title_hidden {
+	padding-left: 32px;
+	padding-top:10px;
+	margin: 0px, 10px, 4px, 30px;
+	font-weight:bold;
+}
+/*
+ * TOC Hidden
+ */
+ .q5_toc_hidden {
+	position: relative;
+	visibility:hidden;
+}
+
+.q5_toc_title_hidden {
+	visibility:hidden;
+}
+
+.q5_toc_hidden ul {
+	visibility:hidden;
+}
+.q5_toc_hidden li {
+	visibility:hidden;
+}
+
+.q5_toc_title_hidden {
+	visibility:hidden;
+}
+
+
+
+
+#mainBodyImage {
+    width:100%;
+    vertical-align:top;
+    z-index:-10;
+}
+
+#mainBodyImageTransparent {
+    width:100%;
+	opacity:0.50;
+	filter:alpha(opacity=50);
+	filter:brightness(50%);
+    vertical-align:top;
+    z-index:-10;
+}
+/*
+ * Site-Pages
+ */
+ .q5_site_page_content{
+    position:absolute;
+    top:100px;
+    left:20%;
+    width:60%;
+    height:100%;
+    background-color:rgba(255, 255, 255, .05);
+	color:blue;
+    display:inline-block;
+	z-index:10;
+}
+
+.q5_site_page_content h1{
+		color: white;
+		font-size: 20pt;
+		font-weight: bold;
+		margin: 10px 0px 10px 0px;
+}
+
+.q5_site_page_content h2{
+		color: white;
+		font-size: 18pt;
+		font-weight: bold;
+		margin: 10px 0px 10px 0px;
+}
+
+.q5_site_page_content h3{
+		color: white;
+		font-size: 16pt;
+		font-weight: bold;
+		margin: 10px 0px 10px 0px;
+}
+
+.q5_site_page_content h4{
+		color: white;
+		font-size: 14pt;
+		font-weight: bold;
+		margin: 10px 0px 10px 0px;
+}
+
+/*
+ * Pages
+ */
+.q5-page-content{
+		padding-left: 60px;
+		padding-right: 60px
+}
+
+.q5-page-content h1 {
+		color: black;
+		font-size: 24pt;
+		font-weight: bold;
+		margin: 10px 0px 10px 0px;
+}
+.q5-page-content h2 {
+		color: black;
+		font-size: 20pt;
+		font-weight: bold;
+		margin: 10px 0px 10px 0px;
+}
+.q5-page-content h3 {
+		color: black;
+		font-size: 18pt;
+		font-weight: bold;
+		margin: 10px 0px 10px 0px;
+}
+.q5-page-content p {
+		color: black;
+		font-size: 12pt;
+		line-height: 1.5;
+}
+.q5-page-content ul {
+	list-style:circle;
+    position:relative;
+	line-height: 1.5;
+    left:25px;
+	margin: 10px 0px 10px 0px;
+}
+ 
+ul#q5-HeaderNavigation {
+    margin:0px auto;
+    position:relative;
+    float:left;
+    border-left:1px solid #c4dbe7;
+    border-right:1px solid #c4dbe7;
+}
+ 
+ul#q5-HeaderNavigation li {
+    display:inline;
+    font-size:12px;
+    font-weight:bold;
+    margin:0;
+    padding:0;
+    float:left;
+    position:relative;
+    border-top:1px solid #c4dbe7;
+    border-bottom:2px solid #c4dbe7;
+}
+ 
+ul#q5-HeaderNavigation li a {
+    padding:10px 25px;
+    color:#616161;
+    text-shadow:1px 1px 0px #fff;
+    text-decoration:none;
+    display:inline-block;
+    border-right:1px solid #fff;
+    border-left:1px solid #C2C2C2;
+    border-top:1px solid #fff;
+    background: #f5f5f5;
+ 
+    -webkit-transition:color 0.2s linear, background 0.2s linear;
+    -moz-transition:color 0.2s linear, background 0.2s linear;
+    -o-transition:color 0.2s linear, background 0.2s linear;
+    transition:color 0.2s linear, background 0.2s linear;
+}
+ 
+ul#q5-HeaderNavigation li a:hover {
+    background:#f8f8f8;
+    color:#282828;
+}
+ 
+ul#q5-HeaderNavigation li a.first {
+    border-left: 0 none;
+}
+ 
+ul#navigation li a.last {
+    border-right: 0 none;
+}
+ 
+ul#q5-HeaderNavigation li:hover > a {
+    background:#fff;
+}
+/* Drop-Down Navigation */
+ul#q5-HeaderNavigation li:hover > ul
+{
+/*these 2 styles are very important,
+being the ones which make the drop-down to appear on hover */
+    visibility:visible;
+    opacity:1;
+}
+ 
+ul#q5-HeaderNavigation ul, ul#q5-HeaderNavigation ul li ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+/*the next 2 styles are very important,
+being the ones which make the drop-down to stay hidden */
+    visibility:hidden;
+    opacity:0;
+    position: absolute;
+    z-index: 99999;
+    width:180px;
+    background:#f8f8f8;
+    box-shadow:1px 1px 3px #ccc;
+/* css3 transitions for smooth hover effect */
+    -webkit-transition:opacity 0.2s linear, visibility 0.2s linear;
+    -moz-transition:opacity 0.2s linear, visibility 0.2s linear;
+    -o-transition:opacity 0.2s linear, visibility 0.2s linear;
+    transition:opacity 0.2s linear, visibility 0.2s linear;
+}
+ 
+ul#q5-HeaderNavigation ul {
+    top: 43px;
+    left: 1px;
+}
+ 
+ul#q5-HeaderNavigation ul li ul {
+    top: 0;
+    left: 181px; /* strong related to width:180px; from above */
+}
+ 
+ul#q5-HeaderNavigation ul li {
+    clear:both;
+    width:100%;
+    border:0 none;
+    border-bottom:1px solid #c9c9c9;
+}
+ 
+ul#q5-HeaderNavigation ul li a {
+    background:none;
+    padding:7px 15px;
+    color:#616161;
+    text-shadow:1px 1px 0px #fff;
+    text-decoration:none;
+    display:inline-block;
+    border:0 none;
+    float:left;
+    clear:both;
+    width:150px;
+}
